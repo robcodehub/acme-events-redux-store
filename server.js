@@ -31,6 +31,10 @@ const app = express();
 const port = process.env.PORT || 3000;
 app.listen(port);
 
+app.get('/dist/main.js', (req, res, next)=>{
+  res.sendFile(path.join(__dirname, 'dist/main.js'));
+});
+
 app.get('/', (req, res, next)=> res.sendFile(path.join(__dirname, 'index.html')));
 
 app.get('/api/events', (req, res, next)=> {
