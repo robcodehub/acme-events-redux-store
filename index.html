@@ -47,8 +47,12 @@ a {
 
     const fetchEvents = async ()=> {
       const events = (await axios.get('/api/events')).data
-      console.log(events);
       store.dispatch({type: 'SET_EVENTS', events: events});
+    };
+
+    const createEvent = async ()=> {
+      const event = (await axios.post('/api/events')).data
+      store.dispatch({type: 'ADD_EVENT', event: event});
     };
 
     const connect = (Component)=> {
@@ -104,11 +108,14 @@ a {
 
       const Events = connect(({events})=> {
         return(
+          <div>
+            <button onClick={()=>createEvent()}> Create Event </button>
           <ul>
             {
               events.map(event=> <li key={ event.id }>{ event.name }</li>)
             }
           </ul>
+          </div>
         );
       });
 
