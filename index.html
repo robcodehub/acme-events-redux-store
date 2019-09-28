@@ -29,6 +29,37 @@ a {
     <div id='root'></div>
     <script type='text/babel'>
 
+    const { createStore, combineReducers } = Redux;
+    const { HashRouter, Route } = ReactRouterDOM;
+
+      /*const reducer = combineReducers({
+        events: (state = [], action) => {
+
+      }
+    });
+
+    const store = createStore(reducer)
+    */
+
+      class App extends React.Component {
+        componentDidMount() {
+          fetchEvents();
+        }
+        render() {
+          return (
+            <HashRouter>
+              <h1> Acme Event Planner With Redux</h1>
+              <Route component={ Nav } />
+              <Route path='/' component = { Home } exact />
+              <Route path = '/events' component= { Events } />
+            </HashRouter>
+          )
+        }
+      }
+
+
+
+
       const connect = (Component)=> {
         class Connected extends React.Component{
           constructor(){
@@ -53,7 +84,7 @@ a {
 
 
 
-      //ReactDOM.render(<App />, document.querySelector('#root'));
+      ReactDOM.render(<App />, document.querySelector('#root'));
 
     </script>
   </body>
