@@ -30,37 +30,28 @@ a {
     <script type='text/babel'>
 
     const { createStore, combineReducers } = Redux;
-    const { HashRouter, Route } = ReactRouterDOM;
+    const { HashRouter, Route, Link } = ReactRouterDOM;
 
-      /*const reducer = combineReducers({
+      const reducer = combineReducers({
         events: (state = [], action) => {
-
+          if(action.type === 'SET_EVENTS'){
+            return action.events
+          }
+          else if(action.type === 'ADD_EVENT'){
+            return [...state, action.event]
+          }
+          return state;
       }
     });
-
     const store = createStore(reducer)
-    */
 
-      class App extends React.Component {
-        componentDidMount() {
-          fetchEvents();
-        }
-        render() {
-          return (
-            <HashRouter>
-              <h1> Acme Event Planner With Redux</h1>
-              <Route component={ Nav } />
-              <Route path='/' component = { Home } exact />
-              <Route path = '/events' component= { Events } />
-            </HashRouter>
-          )
-        }
-      }
+    const fetchEvents = async ()=> {
+      const events = (await axios.get('/api/events')).data
+      console.log(events);
+      store.dispatch({type: 'SET_EVENTS', events: events});
+    };
 
-
-
-
-      const connect = (Component)=> {
+    const connect = (Component)=> {
         class Connected extends React.Component{
           constructor(){
             super();
@@ -80,9 +71,43 @@ a {
         }
         return Connected;
       }
+      class App extends React.Component {
+        componentDidMount() {
+          fetchEvents();
+        }
+        render() {
+          return (
+            <HashRouter>
+              <h1> Acme Event Planner With Redux</h1>
+              <Route component={ Nav } />
+              <Route path='/' component = { Home } exact />
+              <Route path = '/events' component= { Events } />
+            </HashRouter>
+          )
+        }
+      }
 
+      const Nav = connect(({events})=>{
+        return(
+          <nav>
+            <Link to='/'>Home</Link>
+            <Link to='/events'>Events ({events.length})</Link>
+          </nav>
+        );
+      });
 
+      const Home = ()=>{
+        return(
+          <div> You've got events</div>
+        );
+      };
 
+      const Events = ()=> {
+        return(
+          <div>
+          </div>
+        );
+      }
 
       ReactDOM.render(<App />, document.querySelector('#root'));
 
