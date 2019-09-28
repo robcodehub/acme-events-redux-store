@@ -96,18 +96,21 @@ a {
         );
       });
 
-      const Home = ()=>{
+      const Home = connect(({events})=>{
         return(
-          <div> You've got events</div>
+          <div> You've got {events.length} events</div>
         );
-      };
+      });
 
-      const Events = ()=> {
+      const Events = connect(({events})=> {
         return(
-          <div>
-          </div>
+          <ul>
+            {
+              events.map(event=> <li key={ event.id }>{ event.name }</li>)
+            }
+          </ul>
         );
-      }
+      });
 
       ReactDOM.render(<App />, document.querySelector('#root'));
 
